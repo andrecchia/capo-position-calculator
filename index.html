@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capo Position Calculator — Find Open Chord Shapes for Any Key</title>
+<meta name="description" content="Free online capo calculator. Enter any chord progression, optionally transpose it down, and instantly find the best capo fret and easy open chord shapes to play it — no barre chords needed.">
+<meta name="keywords" content="capo calculator, guitar capo, chord transposer, open chord shapes, capo position finder, guitar chords calculator">
+<meta property="og:title" content="Capo Position Calculator — Find Open Chord Shapes for Any Key">
+<meta property="og:description" content="Enter a chord progression, transpose it if needed, and find the best capo position with easy open chord shapes.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Capo Position Calculator">
+<meta name="twitter:description" content="Find the best capo fret and open chord shapes for any chord progression, free and instant.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="title-row">
+    <h1>Capo Position Calculator</h1>
+    <a href="https://github.com/YOUR_USERNAME/YOUR_REPO" target="_blank" rel="noopener" class="gh-link" aria-label="View project on GitHub">
+      <svg viewBox="0 0 16 16" width="22" height="22" fill="currentColor" aria-hidden="true">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+        0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+        -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+        .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+        -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0
+        1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82
+        1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01
+        1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      <span>View on GitHub</span>
+    </a>
+  </div>
+  <div class="sub">Find the best capo fret and easy open chord shapes for any chord progression — no more forcing barre chords when a capo can do the work for you.</div>
+
+  <!-- Input panel: chord progression, optional transposition, accidental
+       spelling, Calculate button. Handled by js/script.js. -->
+  <div class="panel">
+    <label for="chords">Original chord progression</label>
+    <input type="text" id="chords" value="D Em G Bm A" placeholder="e.g. D Em G Bm A">
+    <div class="hint">Separate chords with a space. Minor chords with "m" (e.g. Bm, F#m, Ebm). Also supported with accurate fret diagrams: 7, maj7, m7, sus2, sus4, dim, dim7, aug, 6, m6 (e.g. G7, Dmaj7, Am7, Asus4, Bdim7). Other extensions are kept in the name but shown as a basic triad shape.</div>
+
+    <label for="semitones" style="margin-top:16px;">Lower by N semitones (0 = no transposition)</label>
+    <input type="text" id="semitones" value="0" placeholder="e.g. 4" style="max-width:120px;">
+    <div class="hint">E.g. 4 semitones = 2 whole tones lower. The tool first works out the new key, then finds the capo position and the easiest shapes to play it.</div>
+
+    <label style="margin-top:16px;">Accidental notation</label>
+    <div class="toggle-group">
+      <button type="button" class="toggle-btn active" id="btn-sharp" data-mode="sharp">Sharp (♯)</button>
+      <button type="button" class="toggle-btn" id="btn-flat" data-mode="flat">Flat (♭)</button>
+    </div>
+
+    <button id="calc">Calculate</button>
+    <div class="legend">
+      <span class="l-open">open shape (easy)</span>
+      <span class="l-barre">requires barre / less common shape</span>
+    </div>
+  </div>
+
+  <!-- Populated by js/script.js: renderTargetSummary() fills #target-summary,
+       render() fills #results with the ranked capo-position options. -->
+  <div id="target-summary"></div>
+  <div id="results"></div>
+
+  <div class="panel" style="margin-top:32px;">
+    <div class="hint" style="text-transform:none;letter-spacing:normal;font-size:0.85rem;line-height:1.6;">
+      <strong style="color:var(--ink);">How this capo calculator works.</strong>
+      A capo shortens the strings and raises the pitch of the whole guitar.
+      This tool works backwards: starting from the chords you actually want to hear,
+      it checks every capo position from fret 1 to 9 and figures out which "shape" —
+      the chord you physically finger — produces that sound. It then ranks the options,
+      favoring shapes you can play as open chords (C, D, E, G, A, Am, Em, Dm) over ones
+      that still require a barre, and giving extra weight to capo positions within the
+      first five frets, which stay easiest to play and keep the guitar's tone bright.
+      You can also lower a whole progression by a number of semitones first — useful
+      when transposing a song to a singer's range — before finding the matching capo shapes.
+    </div>
+  </div>
+
+  <div class="panel">
+    <details>
+      <summary>Do it by hand (no tool needed)</summary>
+      <div class="manual-steps">
+        <p>When you don't want to play a chord because it needs a barre, a capo lets you play an easier shape somewhere else on the neck and get the same sound. Working out where to put the capo takes two pieces of information.</p>
+
+        <p>First, the <strong>12 notes</strong> in order: C, C#/Db, D, D#/Eb, E, F, F#/Gb, G, G#/Ab, A, A#/Bb, B, then it repeats. Moving <strong>1 step</strong> in this list is the same as moving <strong>1 fret</strong> on the guitar.</p>
+
+        <p>Second, only <strong>8 chord shapes</strong> are truly easy to play, meaning no barre is needed: C, D, E, G, A for <strong>major</strong> chords, and Am, Em, Dm for <strong>minor</strong> chords. Every other chord, in its normal position, needs a barre.</p>
+
+        <p>With those two facts, the process is:</p>
+
+        <ol>
+          <li>Take any chord from your song — the first one is a good place to start. Say a song needs the chords Bb, Cm, Eb, Gm, F: the first chord is Bb.</li>
+          <li>Check whether it's <strong>major or minor</strong>, then look at the easy shapes of the same type. For each one, count how many steps up the note list it takes to reach your chord. Bb is major, and the nearest easy major shape is A, just <strong>1 step</strong> below it.</li>
+          <li>Try the smallest count first. Subtract that same <strong>number of steps</strong> from every other chord in the song, and check how many of them also land on an easy shape. Trying <strong>capo fret 1</strong> — subtracting <strong>1 step</strong> from each chord — gives A, Bm, D, F#m, E. Two of those, Bm and F#m, still need a barre, so this isn't a good fit.</li>
+          <li>If most or all of them land on easy shapes, that's your capo position. If too many still need a barre, go back and try the next-smallest count instead. Going back to Bb, the next-nearest easy shape is G, <strong>3 steps</strong> below it. Trying <strong>capo fret 3</strong> — subtracting <strong>3 steps</strong> from each chord — gives G, Am, C, Em, D. All five are easy shapes, so that's the answer: <strong>capo on fret 3</strong>, playing G, Am, C, Em, and D.</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+</div>
+
+<script type="module" src="js/script.js"></script>
+<!--
+  Visitor counter (GoatCounter — free, privacy-friendly, no cookies, GDPR-safe).
+  1. Sign up for free at https://www.goatcounter.com (no credit card needed)
+  2. You'll get a site code, e.g. "yoursitename" -> yoursitename.goatcounter.com
+  3. Replace MYCODE below with your actual site code
+  4. View visit counts anytime at https://yoursitename.goatcounter.com
+-->
+<script data-goatcounter="https://MYCODE.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
